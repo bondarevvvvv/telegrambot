@@ -600,4 +600,6 @@ def callback_handler(call):
 if __name__ == '__main__':
     print("🤖 Основной бот запущен...")
     print(f"📢 Уведомления отправляются админу ID: {ADMIN_ID}")
+    bot.remove_webhook()
     bot.infinity_polling()
+
