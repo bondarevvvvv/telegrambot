@@ -10,7 +10,7 @@ BOT_TOKEN = '8510845153:AAGUO5jg01h2NlL46VsD1f-7osYIBVTkxTQ'
 bot = telebot.TeleBot(BOT_TOKEN)
 
 # ========== НАСТРОЙКИ АДМИНА ==========
-ADMIN_ID = 821500372  # ← ВСТАВЬТЕ ВАШЕ ID СЮДА!
+ADMIN_ID = 765808192  # ← ВСТАВЬТЕ ВАШЕ ID СЮДА!
 
 # Функция отправки уведомления админу
 def notify_admin(title, user_name, user_id, username, details):
@@ -647,3 +647,4 @@ if __name__ == '__main__':
     print(f"📢 Уведомления отправляются админу ID: {ADMIN_ID}")
     bot.remove_webhook()
     bot.infinity_polling()
+
