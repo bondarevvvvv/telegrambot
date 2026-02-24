@@ -33,6 +33,30 @@ def notify_admin(title, user_name, user_id, username, details):
     except Exception as e:
         print(f"Ошибка отправки уведомления админу: {e}")
 
+# Новая универсальная функция уведомлений о любом действии пользователя
+def notify_admin_action(user_id, username, first_name, action_type, details):
+    """
+    Отправляет уведомление админу о любом действии пользователя.
+    action_type — короткое описание типа действия (например, 'TEXT', 'BUTTON', 'PHONE', etc.)
+    details — текст с деталями о действии
+    """
+    try:
+        notification = f"""
+🔔 ДЕЙСТВИЕ ПОЛЬЗОВАТЕЛЯ
+
+👤 Пользователь: {first_name}
+🆔 ID: {user_id}
+📱 Username: @{username if username else 'не указан'}
+
+Тип: {action_type}
+Детали:
+{details}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+"""
+        bot.send_message(ADMIN_ID, notification)
+    except Exception as e:
+        print(f"Ошибка отправки уведомления админу: {e}")
+
 # Файл для хранения данных
 DATA_FILE = 'users_data.json'
 ACTIONS_FILE = 'user_actions.json'
@@ -104,6 +128,15 @@ def start(message):
     # Логируем действие
     log_action(user_id, username, first_name, 'command', '/start')
     
+    # Новый: уведомление админу о старте
+    notify_admin_action(
+        user_id,
+        username,
+        first_name,
+        'COMMAND',
+        "/start"
+    )
+    
     # Проверяем новый ли пользователь
     data = load_data()
     is_new_user = user_id not in data
@@ -133,6 +166,9 @@ def message2(message):
     
     # Логируем действие
     log_action(user_id, username, first_name, 'button_click', message.text)
+    
+    # Новое: уведомление админу о кнопке
+    notify_admin_action(user_id, username, first_name, 'BUTTON_CLICK', f"Кнопка: {message.text}")
     
     text = "Расскажите какой у Вас объект?\nМожно выбрать вариант или написать своими словами"
     
@@ -374,6 +410,12 @@ def handle_text(message):
     first_name = message.from_user.first_name
     state = user_states.get(user_id)
     
+    # Логируем текстовое сообщение
+    log_action(user_id, username, first_name, 'text_message', message.text)
+
+    # Универсальное уведомление админу о любом текстовом сообщении
+    notify_admin_action(user_id, username, first_name, 'TEXT_MESSAGE', f"Текст: {message.text}")
+
     # Ожидание телефона (текстовый ввод)
     if state == 'waiting_phone':
         phone = message.text
@@ -535,6 +577,9 @@ def callback_handler(call):
     # Логируем действие
     log_action(user_id, username, first_name, 'inline_button_click', call.data)
     
+    # Универсальное уведомление админу о каждом нажатии inline-кнопки
+    notify_admin_action(user_id, username, first_name, 'INLINE_BUTTON', f"Кнопка: {call.data}")
+    
     bot.answer_callback_query(call.id)
     
     # Уведомляем о начале оформления заявки
@@ -602,4 +647,3 @@ if __name__ == '__main__':
     print(f"📢 Уведомления отправляются админу ID: {ADMIN_ID}")
     bot.remove_webhook()
     bot.infinity_polling()
-
