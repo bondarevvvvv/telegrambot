@@ -8,13 +8,7 @@ import gspread
 from google.oauth2.service_account import Credentials
 
 # Вставьте сюда токен вашего бота от @BotFather
-from dotenv import load_dotenv
-
-load_dotenv()  # подхватит .env локально; на хостинге просто не найдёт файл и не помешает
-
-BOT_TOKEN = os.getenv('BOT_TOKEN')
-if not BOT_TOKEN:
-    raise ValueError("BOT_TOKEN не найден. Задайте переменную окружения BOT_TOKEN.")
+BOT_TOKEN = '8510845153:AAGUO5jg01h2NlL46VsD1f-7osYIBVTkxTQ'
 
 bot = telebot.TeleBot(BOT_TOKEN)
 
