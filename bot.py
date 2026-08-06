@@ -8,7 +8,6 @@ import gspread
 from google.oauth2.service_account import Credentials
 
 # Вставьте сюда токен вашего бота от @BotFather
-import os
 from dotenv import load_dotenv
 
 load_dotenv()  # подхватит .env локально; на хостинге просто не найдёт файл и не помешает
